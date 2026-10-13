@@ -219,6 +219,43 @@ dialog.shot .close{position:absolute;top:8px;right:8px}
 .replybar{background:var(--orange-bg);border-radius:10px;padding:10px 12px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
 .replybar[hidden]{display:none}
 .item .sub .cref{color:var(--orange);font-weight:600}
+/* ---------- Manual de vuelo ---------- */
+.mv-sec{margin:30px 0 14px;font-family:var(--display);font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mv-sec:first-of-type{margin-top:6px}
+.pil-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.pil-grid{grid-template-columns:1fr}}
+.pil{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;align-items:start}
+.pil .ico{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.pil .ico svg{width:22px;height:22px}
+.pil h3{font-family:var(--display);font-size:15px;font-weight:700;margin:2px 0 8px;letter-spacing:.02em}
+.pil .bar{height:5px;border-radius:99px;width:48px;margin-bottom:10px}
+.pil p{margin:0 0 10px;font-size:14px}
+.pil .how{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 11px}
+.pil .how b{color:var(--ink)}
+.p1 .ico,.p1 .bar{background:#293D51} .p2 .ico,.p2 .bar{background:#F54D23}
+.p3 .ico,.p3 .bar{background:#C9A227} .p4 .ico,.p4 .bar{background:#4A97AE}
+:root[data-theme="dark"] .p1 .ico,:root[data-theme="dark"] .p1 .bar{background:#5B7896}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .p1 .ico,:root:not([data-theme="light"]) .p1 .bar{background:#5B7896}}
+.bp{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.bp summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px}
+.bp summary::-webkit-details-marker{display:none}
+.bp summary .em{font-size:20px;line-height:1}
+.bp summary .tg{margin-left:auto;font-size:12px;font-weight:700;color:var(--orange);background:var(--orange-bg);padding:3px 10px;border-radius:99px;white-space:nowrap}
+.bp summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-left:6px;transition:transform .15s;flex:none}
+.bp[open] summary::after{transform:rotate(-135deg)}
+.bp .bd{padding:0 20px 18px;font-size:14px}
+.bp .bd h4{font-size:13px;margin:14px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.bp ul{margin:0;padding-left:18px}
+.bp li{margin:6px 0}
+.bp .tip{margin-top:12px;font-size:13px;font-style:italic;color:var(--muted)}
+.check{background:var(--navy);color:#fff;border-radius:14px;padding:22px}
+.check ul{margin:0;padding:0;list-style:none}
+.check li{padding:9px 0 9px 30px;position:relative;border-top:1px solid #ffffff1f;font-size:14px}
+.check li:first-child{border-top:0}
+.check li::before{content:"";position:absolute;left:4px;top:13px;width:12px;height:6px;border-left:2px solid var(--orange-soft);border-bottom:2px solid var(--orange-soft);transform:rotate(-45deg)}
+.check li b{color:#fff}
+.check .end{margin-top:14px;font-weight:700;color:var(--orange-soft)}
+@media (max-width:560px){.bp summary{flex-wrap:wrap}.bp summary .tg{margin-left:32px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .refresh{background:none;border:1px solid #ffffff44;color:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;cursor:pointer}
@@ -267,6 +304,7 @@ window.WA_CONFIG = {
     <button class="tab" role="tab" data-v="rank" aria-selected="false">Ranking</button>
     <button class="tab" role="tab" data-v="admin" aria-selected="false" hidden>Validación<span class="count" id="pendCount" hidden></span></button>
     <button class="tab" role="tab" data-v="crew" aria-selected="false" hidden>Tripulación</button>
+    <button class="tab" role="tab" data-v="guide" aria-selected="false">Manual de vuelo</button>
     <button class="tab" role="tab" data-v="how" aria-selected="false">Cómo sumar</button>
   </nav>
 </header>
@@ -317,8 +355,8 @@ window.WA_CONFIG = {
           <input type="file" id="fFile" accept="image/*" hidden>
         </div>
         <div class="field">
-          <label class="f" for="fNote">Comentario para Marketing <span class="opt">(opcional)</span></label>
-          <textarea id="fNote" maxlength="500" placeholder="Contexto que ayude a validar: red social, con quién lo hiciste, etc."></textarea>
+          <label class="f" for="fNote">Observaciones para Marketing o ideas que quieras hacer llegar <span class="opt">(opcional)</span></label>
+          <textarea id="fNote" maxlength="500" placeholder="Contexto que ayude a validar (red social, con quién lo hiciste) o cualquier idea que quieras compartir."></textarea>
         </div>
         <button class="btn full" id="fSend">Enviar a validar</button>
         <div class="msg" id="fMsg"></div>
@@ -411,6 +449,38 @@ window.WA_CONFIG = {
         <h3 id="crewCountTitle">En la tripulación</h3>
         <div id="crewList"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- MANUAL DE VUELO -->
+  <section class="view" id="v-guide" hidden>
+    <h2>Manual de vuelo</h2>
+    <p class="lede">Todo lo que necesitás para que tu contenido despegue: nuestros pilares de comunicación y las buenas prácticas que recomienda el equipo de Marketing.</p>
+
+    <h3 class="mv-sec">Nuestros 4 pilares</h3>
+    <p class="lede" style="margin-top:-6px">Todo lo que publicamos como We Are entra en alguna de estas cuatro líneas. Si tu idea encaja en una, va por buen camino.</p>
+    <div class="pil-grid">
+<div class="pil p1"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg></div><div><h3>Agencia Institucional</h3><div class="bar"></div><p>La marca We Are: nuestra metodología, los eventos del sector y su backstage.</p><div class="how"><b>Cómo podés sumar:</b> compartiendo fotos o videos de un evento al que fuiste, contando cómo aplicamos la metodología en tu día a día, o reposteando los anuncios de la agencia con tu mirada.</div></div></div>
+<div class="pil p2"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg></div><div><h3>We Are Experts</h3><div class="bar"></div><p>Microtips, contenido educativo y casos que muestran el expertise de cada área: Paid, Data, Marketplace, Diseño, Email y Gestión.</p><div class="how"><b>Cómo podés sumar:</b> sos la voz experta. Un aprendizaje de la semana, un error común que ves en las marcas o un dato que te sorprendió son contenido de oro.</div></div></div>
+<div class="pil p3"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div><div><h3>Digital Sessions / Express</h3><div class="bar"></div><p>La voz de Alan: el talk show, sus lives y las coberturas Express de eventos.</p><div class="how"><b>Cómo podés sumar:</b> compartiendo los episodios con tu opinión, proponiendo temas o invitados, y comentando los lives.</div></div></div>
+<div class="pil p4"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg></div><div><h3>Trabajar en We Are</h3><div class="bar"></div><p>Bienvenidas, novedades internas y el detrás de escena del equipo. Orgullo de pertenecer.</p><div class="how"><b>Cómo podés sumar:</b> mostrando cómo es tu día, celebrando logros del equipo o contando qué te gusta de trabajar acá.</div></div></div>
+    </div>
+
+    <h3 class="mv-sec">Buenas prácticas de la tripulación</h3>
+<details class="bp" open><summary><span class="em">🎥</span><span>Si vas a grabar un video</span><span class="tg">Video de marketing · +15</span></summary><div class="bd"><ul><li><b>Luz:</b> ponete de frente a una ventana o a una fuente de luz, nunca de espaldas. La luz natural es tu mejor aliada.</li><li><b>Sonido:</b> grabá en un lugar silencioso. Si no tenés micrófono, acercá el celular (a no más de un brazo de distancia). El sonido se perdona menos que la imagen.</li><li><b>Encuadre:</b> dejá aire arriba de la cabeza y a los costados. Las redes tapan parte de la pantalla con botones y textos, y el editor necesita margen para los subtítulos.</li><li><b>Formato:</b> grabá en vertical para Reels y TikTok, y en horizontal solo si te lo piden.</li><li><b>Fondo:</b> que esté ordenado y sin distracciones. Si se ve algo de We Are, mejor.</li><li><b>Arranque:</b> los primeros 3 segundos definen si te siguen mirando. Arrancá directo con la idea, sin "hola, bueno, eh…".</li><li><b>Ojos a cámara:</b> mirá al lente, no a tu imagen en la pantalla.</li><li><b>Tomas extra:</b> grabá dos o tres veces. Es más fácil elegir que volver a grabar.</li></ul></div></details>
+<details class="bp"><summary><span class="em">💭</span><span>Si vas a presentar una idea o un insight</span><span class="tg">Insight · +10</span></summary><div class="bd"><p style="margin:0 0 6px">Antes de llevarla a Marketing, respondé estas preguntas:</p><ul><li><b>¿Qué queremos transmitir?</b> Resumilo en una sola frase. Si no entra en una frase, todavía no está lista.</li><li><b>¿Para quién es?</b> ¿Para las marcas clientes, para sus equipos o para mostrar cómo es trabajar en We Are?</li><li><b>¿En qué pilar entra?</b> Usá los cuatro de arriba.</li><li><b>¿Por qué ahora?</b> Una tendencia, una fecha comercial, algo que pasó en la industria.</li><li><b>¿Tenés una referencia?</b> Un post, un video o una marca que lo haga bien suma mucho.</li><li><b>¿Qué formato imaginás?</b> Carrusel, reel, post, video con alguien del equipo.</li></ul><p class="tip">Una buena idea no tiene que venir terminada: con un objetivo claro, Marketing te ayuda a darle forma.</p></div></details>
+<details class="bp"><summary><span class="em">🏆</span><span>Si vas a traer un caso de éxito</span><span class="tg">Caso de éxito · +20</span></summary><div class="bd"><h4>¿Cómo lo identifico?</h4><p style="margin:0 0 6px">Hay un caso cuando una marca con la que trabajamos tuvo un cambio concreto y medible gracias al trabajo del equipo. Pistas:</p><ul><li>Un resultado que te hizo decir "esto hay que contarlo".</li><li>Un antes y un después claro.</li><li>Un desafío difícil que se resolvió con una estrategia distinta.</li></ul><h4>¿Qué tiene que tener?</h4><ul><li><b>La marca:</b> quién es y a qué se dedica.</li><li><b>El desafío:</b> qué problema u objetivo tenían cuando llegaron.</li><li><b>Qué hicimos:</b> la estrategia y las áreas que participaron.</li><li><b>Los resultados:</b> números concretos con el período (por ejemplo: "+X% de ventas en 3 meses"), siempre con la fuente de los datos.</li><li><b>El aprendizaje:</b> qué nos llevamos que le sirva a otras marcas.</li><li><b>La autorización:</b> antes de que salga, la marca tiene que aprobar que la mencionemos y que mostremos sus datos.</li></ul></div></details>
+<details class="bp"><summary><span class="em">✍️</span><span>Si vas a publicar desde tu perfil</span><span class="tg">Post propio · +20</span></summary><div class="bd"><ul><li>La primera línea es todo: arrancá con una pregunta, un dato o una frase que frene el scroll.</li><li>Una idea por posteo. Mejor uno claro que tres a medias.</li><li>Contalo desde tu experiencia. Tu mirada personal es lo que lo hace valioso.</li><li>Mencioná a We Are para que el contenido sume a la marca (y a tus puntos).</li></ul></div></details>
+<details class="bp"><summary><span class="em">💬</span><span>Si vas a comentar o repostear</span><span class="tg">Comentario +5 · Repost +5/+10</span></summary><div class="bd"><ul><li>Sumá algo propio: tu opinión, una experiencia, una pregunta. Un comentario con contenido genera más conversación que un emoji (y la navecita sola no suma puntos 😉).</li><li>En un repost, una línea tuya alcanza para que el algoritmo y tu red lo valoren más.</li></ul></div></details>
+
+    <h3 class="mv-sec">Antes de despegar: chequeo final</h3>
+    <div class="check">
+      <ul>
+        <li><b>Datos de clientes:</b> no compartas métricas, nombres ni capturas de clientes sin autorización. Ante la duda, consultá a Marketing.</li>
+        <li><b>Posicionamiento:</b> hablamos como socios de crecimiento de las marcas. Nuestra frase es "Creamos valor, no dependencia".</li>
+        <li><b>Revisión:</b> antes de publicar, revisá ortografía y que se entienda en una primera lectura.</li>
+      </ul>
+      <div class="end">Si no estás seguro de algo, preguntá. Estamos para ayudarte.</div>
     </div>
   </section>
 
@@ -531,7 +601,7 @@ setInterval(function(){ if(S && !busy && document.visibilityState === "visible")
 function show(v){
   ui.view = v;
   document.querySelectorAll(".tab").forEach(function(t){ t.setAttribute("aria-selected", t.dataset.v === v ? "true" : "false"); });
-  ["mine","tasks","rank","admin","crew","how"].forEach(function(k){ $("v-" + k).hidden = (k !== v); });
+  ["mine","tasks","rank","admin","crew","guide","how"].forEach(function(k){ $("v-" + k).hidden = (k !== v); });
   render();
 }
 $("tabs").addEventListener("click", function(e){ var t = e.target.closest(".tab"); if(t && S) show(t.dataset.v); });
